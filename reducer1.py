@@ -50,12 +50,9 @@ def main(args):
   #print 'old centroids'
   #print oldCentroid
   #print 'new centroids' 
-  # output the new centroids to a file that will be used in the next mapper
-  FILE1 = open("centroid1.txt","w")
-    # Write all the lines at once:
-  FILE1.writelines(newCentroid)			
-  print newCentroid	
-	
+  		
+  print newCentroid
+  	
 if __name__ == "__main__": main(sys.argv)	
 
 
