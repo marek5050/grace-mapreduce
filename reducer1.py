@@ -4,13 +4,13 @@ from operator import itemgetter
 from collections import defaultdict
 import sys
 
-# maps words to their counts
-point2centroid = defaultdict(list)
+def main(args):
+  
+  point2centroid = defaultdict(list)
 
-#line = "foo	foo	quux	labs	foo	bar	quux"
-# input comes from STDIN
-
-for line in sys.stdin:
+  
+  # input comes from STDIN
+  for line in sys.stdin:
     	# remove leading and trailing whitespace
 	line = line.strip()
 	
@@ -19,26 +19,24 @@ for line in sys.stdin:
 	centroid, point = line.split('\t')
 	point2centroid[centroid].append(point)
 	
-#print point2centroid.items()
-pointX =0
-pointY =0
-newCentroid=''
-oldCentroid=''
+  #print point2centroid.items()
+  pointX =0
+  pointY =0 
+  newCentroid=''
+  oldCentroid=''
 
-for centroid in point2centroid:
+  for centroid in point2centroid:
 	sumX =0
 	sumY=0
 	count=0
 	newX =0
 	newY=0
 	
-	#centroid =1
-	#print centroid
 	oldCentroid  += centroid
 	oldCentroid += ' '
 	for point in point2centroid[centroid]:
 		pointX, pointY = point.split(',')
-		sumX = sumX + int(pointX)
+		sumX += int(pointX)
 		sumY+=int(pointY)
 		count +=1
 	
@@ -49,11 +47,15 @@ for centroid in point2centroid:
 	newCentroid +=`newX`+','+`newY`
 	newCentroid+= ' '
 
-print 'old centroids'
-print oldCentroid
-print 'new centroids'			
-print newCentroid	
+  #print 'old centroids'
+  #print oldCentroid
+  #print 'new centroids' 
+  # output the new centroids to a file that will be used in the next mapper
+  FILE1 = open("centroid1.txt","w")
+    # Write all the lines at once:
+  FILE1.writelines(newCentroid)			
+  print newCentroid	
 	
-	
+if __name__ == "__main__": main(sys.argv)	
 
 
