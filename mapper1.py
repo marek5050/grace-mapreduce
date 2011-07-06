@@ -1,86 +1,42 @@
 #!/usr/bin/env python  
-import sys, math, random 
-class Point:
-    # Instance variables
-    # self.coords is a list of coordinates for this Point
-    # self.n is the number of dimensions this Point lives in (ie, its space)
-    # self.reference is an object bound to this Point
-    # Initialize new Points
-    def __init__(self, coords, reference=None):
-        self.coords = coords
-        self.n = len(coords)
-        self.reference = reference
-    # Return a string representation of this Point
-    def __repr__(self):
-        return str(self.coords)
-
-
-def main(args): 
-  
-  
-  # variable to hold map output
-  outputmap = ''
-  #centroid details are stored in an input file
-  #cfile = " ~/hadoop/centroidinput.txt"
-  cfile = "centroidinput.txt"
-  infilecen = open(cfile,"r") 
-  centroid = infilecen.readline()
-  #print centroid	
-  for point in sys.stdin: 
-  #for point in points: 
-  # remove leading and trailing whitespace  
+import sys  
+# input comes from STDIN (standard input) 
+#line = "foo foo quux labs foo bar quux" 
+#test = "2 5 15 27 39 55 100 45 78 97"
+#centroid = "(5,2) (11,4) (25,9) (69,49) (92,45)" 
+centroid = "5,4 11,10 25,11 69,67 92,78" 	
+for point in sys.stdin: 
+#for line in sys.stdin: 
+# remove leading and trailing whitespace  
 	point = point.strip()  
     # split the line into words  
 	points = point.split()  
 
-#   remove leading and trailing whitespace  
+# remove leading and trailing whitespace  
 	centroid = centroid.strip()  
     # split the centroid into centroids 
-	centroids = centroid.split()
-	outfile = open("mapoutput1.txt","w")  
+	
+	centroids = centroid.split()  
 	   # increase counters  
 	for value in points:
 		dist = 0
 		minDist = 999999
 		bestCent = 0
-	
 		for c in centroids:
 			# split each co-ordinate of the centroid and the point
 			cSplit = c.split(',')
 			vSplit = value.split(',')
-			
-			# To handle non-numeric value in centroid or input points
-			try:
-				#dist = abs(int(cSplit[0]) - int(vSplit[0]))
-				dist = (((int(cSplit[0]) - int(vSplit[0]))**2) + ((int(cSplit[1]) - int(vSplit[1]))**2))**.5
-				#print dist
-				if dist < minDist:
-					minDist = dist
-					bestCent = c
-			except ValueError:
-				pass
+			#print cSplit[0]
+			#print vSplit[0]
+			dist = (((int(cSplit[0]) - int(vSplit[0]))**2) + ((int(cSplit[1]) - int(vSplit[1]))**2))**.5
+			#print dist
+			if dist < minDist:
+				minDist = dist
+				bestCent = c
 					  
-    # write the results to STDOUT (standard output) and store in a variable to write to an output file;  
+    # write the results to STDOUT (standard output);  
     # what we output here will be the input for the  
     # Reduce step, i.e. the input for reducer.py  
     #  
-    # tab-delimited
-		#outputmap += `bestCent`+'   '+`value` 
-		#outfile.writelines(outputmap)
-       	 	print '%s\t%s' % (bestCent, value)
-	outfile = open("mapoutput1.txt","w")
-	outfile.writelines(outputmap)
-	outfile.close() 
-
-def makeCentroids():
-	cfile = open("centroidinput.txt", "r")
-	seed = cfile.readline()
-	cfile.close()
-	#seed = "43,211 130,62 387,253 454,734 545,920"  
-	FILE1 = open("centroidpoints.txt","w")
-    # Write all the lines for seed = "15,40 110,10 25,9 69,678 240,78"  centroids at once:
-    	FILE1.writelines(seed)
-    	FILE1.close()
-    	return seed
-if __name__ == "__main__": main(sys.argv)
-
+    # tab-delimited; the trivial word count is 1  
+       	 	print '%s\t%s' % (value, bestCent) 
