@@ -2,6 +2,7 @@
 import sys, math, random 
 import os
 import shutil
+import time
 
 def main(args):
 	# maximum delta is set to 2.
@@ -16,6 +17,9 @@ def main(args):
   	pointx = makeRandomPoint(num_points, lower, upper)
 	# To test intially with 7 iterations
 	num_iter = 1
+	
+	# initialize starttime to calculate the total time taken to converge.
+	start = time.time()
 	# copies the  generated datapoints file and seed centroid file from local folder to hdfs and starts mapReduce
 	os.system('bin/hadoop dfs -put ~/hadoop/datapoints.txt datapoints.txt')
 	#while num_iter< 4 and maxDelta >2:
@@ -62,6 +66,7 @@ def main(args):
 			
 	
 	  print maxDelta
+	  print num_iter
 	  print "$$$$$$$$$$$$    next iteration  $$$$$$$$$$$$$$$"
 	  #checks the new delta value to avoid additional mapreduce iteration
 	  if maxDelta > 2:
@@ -102,7 +107,9 @@ def main(args):
   	    num_iter += 1
 	    os.system('bin/hadoop dfs -rmr data-output')
 	    os.system('bin/hadoop dfs -rmr centroidinput.txt')
-	
+	end = time.time()
+	elapsed = end -start
+	print "elapsed time ", elapsed/60, "minutes"	
 	
 def makeRandomPoint(num_points, lower, upper):
     datapoints = ''
