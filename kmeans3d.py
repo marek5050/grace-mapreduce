@@ -73,7 +73,7 @@ def main(args):
 	  if maxDelta > 2:
 	    os.system('bin/hadoop dfs -put ~/hadoop/centroidinput.txt centroidinput.txt')
 		
-  	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper13d.py -mapper ~/hadoop/mapper13d.py -file ~/hadoop/reducer13d.py -reducer ~/hadoop/reducer13d.py -input datapoints.txt -file centroidinput.txt -file mapoutput1.txt -output data-output')
+  	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper13d.py -mapper ~/hadoop/mapper13d.py -file ~/hadoop/reducer13d.py -reducer ~/hadoop/reducer13d.py -input datapoints.txt -file centroidinput.txt -file mapoutput1.txt -file ~/hadoop/defdict.py -output data-output')
 		
 	    #old_centroid is filled in for future delta calculation
 	    cfile = open("centroidinput.txt", "r")
