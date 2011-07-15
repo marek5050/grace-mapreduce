@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 from operator import itemgetter
-from collections import defaultdict
+#from collections import defaultdict
+from defdict import *
 import sys
 
 def main(args):

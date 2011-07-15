@@ -12,12 +12,13 @@ def main(args):
 	oldCentroid = ''
 	currentCentroid = ''
 	# variables to generate random data points
-  	num_points, n, lower, upper = 100,2,1, 100
+  	#num_points, n, lower, upper = 100,2,1, 100
+	num_points, n, lower, upper = 100,2,1, 900
     	# Create num_points random Points in n-dimensional space
   	pointx = makeRandomPoint(num_points, lower, upper)
 	# To test intially with 7 iterations
 	num_iter = 1
-	
+	statistics =''
 	# initialize starttime to calculate the total time taken to converge.
 	start = time.time()
 	# copies the  generated datapoints file and seed centroid file from local folder to hdfs and starts mapReduce
@@ -64,7 +65,7 @@ def main(args):
 			if minDist > maxDelta:
 				maxDelta = minDist
 			
-	
+	  statistics += '\n num_iteration: ' +`num_iter`+';  Delta: '+`maxDelta`
 	  print maxDelta
 	  print num_iter
 	  print "$$$$$$$$$$$$    next iteration  $$$$$$$$$$$$$$$"
@@ -72,7 +73,7 @@ def main(args):
 	  if maxDelta > 2:
 	    os.system('bin/hadoop dfs -put ~/hadoop/centroidinput.txt centroidinput.txt')
 		
-  	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper1.py -mapper ~/hadoop/mapper1.py -file ~/hadoop/reducer1.py -reducer ~/hadoop/reducer1.py -input datapoints.txt -file centroidinput.txt -file mapoutput1.txt -output data-output')
+  	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper1.py -mapper ~/hadoop/mapper1.py -file ~/hadoop/reducer1.py -reducer ~/hadoop/reducer1.py -input datapoints.txt -file centroidinput.txt -file mapoutput1.txt -file ~/hadoop/defdict.py -output data-output')
 		
 	    #old_centroid is filled in for future delta calculation
 	    cfile = open("centroidinput.txt", "r")
@@ -83,33 +84,39 @@ def main(args):
 	    os.rename("output/part-00000", "centroidinput.txt")
 	    shutil.rmtree('output')
 	    #This part of the program can be removed for final output. Just for test run.
-	    if num_iter ==1:
+	    #if num_iter ==1:
 		
-		shutil.copyfile("centroidinput.txt", "centroidinput1.txt")
-	    elif num_iter ==2:
-		shutil.copyfile("centroidinput.txt", "centroidinput2.txt")
+		#shutil.copyfile("centroidinput.txt", "centroidinput1.txt")
+	    #elif num_iter ==2:
+		#shutil.copyfile("centroidinput.txt", "centroidinput2.txt")
 		
-	    elif num_iter ==3:
-		shutil.copyfile("centroidinput.txt", "centroidinput3.txt")
+	    #elif num_iter ==3:
+		#shutil.copyfile("centroidinput.txt", "centroidinput3.txt")
 		
-	    elif num_iter ==4:
-		shutil.copyfile("centroidinput.txt", "centroidinput4.txt")
+	    #elif num_iter ==4:
+		#shutil.copyfile("centroidinput.txt", "centroidinput4.txt")
 		
-	    elif num_iter ==5:
-		shutil.copyfile("centroidinput.txt", "centroidinput5.txt")
+	    #elif num_iter ==5:
+		#shutil.copyfile("centroidinput.txt", "centroidinput5.txt")
 		
-	    elif num_iter ==6:
-		shutil.copyfile("centroidinput.txt", "centroidinput6.txt")
+	    #elif num_iter ==6:
+		#shutil.copyfile("centroidinput.txt", "centroidinput6.txt")
 		
-	    elif num_iter ==7:
-		shutil.copyfile("centroidinput.txt", "centroidinput7.txt")
+	    #elif num_iter ==7:
+		#shutil.copyfile("centroidinput.txt", "centroidinput7.txt")
 		# prepare for next iteration and remove the existing files in dfs
+	      
   	    num_iter += 1
 	    os.system('bin/hadoop dfs -rmr data-output')
 	    os.system('bin/hadoop dfs -rmr centroidinput.txt')
 	end = time.time()
 	elapsed = end -start
-	print "elapsed time ", elapsed/60, "minutes"	
+	print "elapsed time ", elapsed, "seconds"
+	statistics += '\n  Time_elapsed: '+ `elapsed`
+	FILE = open("statistics.txt","w")
+    	# Write all the lines for datapoints at once:
+    	FILE.writelines(statistics)
+    	FILE.close()	
 	
 def makeRandomPoint(num_points, lower, upper):
     datapoints = ''
