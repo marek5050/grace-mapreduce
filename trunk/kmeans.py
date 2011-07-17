@@ -11,6 +11,7 @@ def main(args):
 	#currentCentroid = '79,27 22,88 77,72 20,11 22,55'
 	oldCentroid = ''
 	currentCentroid = ''
+	
 	# variables to generate random data points
   	#num_points, n, lower, upper = 100,2,1, 100
 	num_points, n, lower, upper = 100,2,1, 900
@@ -64,7 +65,8 @@ def main(args):
 					pass
 			if minDist > maxDelta:
 				maxDelta = minDist
-			
+	  else:
+		statistics += '\n seed centroid: ' +`currentCentroid`				
 	  statistics += '\n num_iteration: ' +`num_iter`+';  Delta: '+`maxDelta`
 	  print maxDelta
 	  print num_iter
@@ -83,29 +85,7 @@ def main(args):
 	    os.system('bin/hadoop dfs -copyToLocal /user/grace/data-output ~/hadoop/output')
 	    os.rename("output/part-00000", "centroidinput.txt")
 	    shutil.rmtree('output')
-	    #This part of the program can be removed for final output. Just for test run.
-	    #if num_iter ==1:
-		
-		#shutil.copyfile("centroidinput.txt", "centroidinput1.txt")
-	    #elif num_iter ==2:
-		#shutil.copyfile("centroidinput.txt", "centroidinput2.txt")
-		
-	    #elif num_iter ==3:
-		#shutil.copyfile("centroidinput.txt", "centroidinput3.txt")
-		
-	    #elif num_iter ==4:
-		#shutil.copyfile("centroidinput.txt", "centroidinput4.txt")
-		
-	    #elif num_iter ==5:
-		#shutil.copyfile("centroidinput.txt", "centroidinput5.txt")
-		
-	    #elif num_iter ==6:
-		#shutil.copyfile("centroidinput.txt", "centroidinput6.txt")
-		
-	    #elif num_iter ==7:
-		#shutil.copyfile("centroidinput.txt", "centroidinput7.txt")
-		# prepare for next iteration and remove the existing files in dfs
-	      
+	          
   	    num_iter += 1
 	    os.system('bin/hadoop dfs -rmr data-output')
 	    os.system('bin/hadoop dfs -rmr centroidinput.txt')
@@ -113,10 +93,29 @@ def main(args):
 	elapsed = end -start
 	print "elapsed time ", elapsed, "seconds"
 	statistics += '\n  Time_elapsed: '+ `elapsed`
+	statistics += '\n New Centroids: '+ `currentCentroid`
+	
+	
+	# final clustering of the datapoints
+	os.system('bin/hadoop dfs -put ~/hadoop/centroidinput.txt centroidinput.txt')
+		
+  	os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper1.py -mapper ~/hadoop/mapper1.py -file ~/hadoop/reducerfinal.py -reducer ~/hadoop/reducerfinal.py -input datapoints.txt -file centroidinput.txt -file mapoutput1.txt -file ~/hadoop/defdict.py -output data-output')
+			    
+	# output is copied to local files for later lookup and the hdfs version is deleted for next iteration.
+	os.system('bin/hadoop dfs -copyToLocal /user/grace/data-output ~/hadoop/output')
+	os.rename("output/part-00000", "finalcluster.txt")
+	cfile = open("finalcluster.txt", "r")
+	currentCluster = cfile.readline()
+	cfile.close()
+	statistics += '\n New Cluster: ' + `currentCluster`
 	FILE = open("statistics.txt","w")
-    	# Write all the lines for datapoints at once:
+    	# Write all the lines for statistics at once:
     	FILE.writelines(statistics)
-    	FILE.close()	
+    	FILE.close()
+	shutil.rmtree('output')
+	os.system('bin/hadoop dfs -rmr data-output')
+	os.system('bin/hadoop dfs -rmr centroidinput.txt')
+	os.system('bin/hadoop dfs -rmr datapoints.txt')
 	
 def makeRandomPoint(num_points, lower, upper):
     datapoints = ''
