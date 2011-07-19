@@ -10,11 +10,6 @@ def main(args):
 	oldCentroid = ''
 	currentCentroid = ''
 
-	# variables to generate random data points
-  	#num_points, n, lower, upper = 100,2,1, 100
-	num_points, n, lower, upper = 100,2,1, 900
-    	# Create num_points random Points in n-dimensional space
-  	pointx = makeRandomPoint(num_points, lower, upper)
 	# To test intially with 7 iterations
 	num_iter = 1
 	statistics =''
@@ -107,31 +102,14 @@ def main(args):
 	currentCluster = cfile.readline()
 	cfile.close()
 	statistics += '\n New Cluster: ' + `currentCluster`
-	FILE = open("statistics.txt","w")
-        # Write all the lines for statistics at once:
-        FILE.writelines(statistics)
-        FILE.close()
+	STAT = open("statistics.txt","w")
+    	# Write all the lines for statistics at once:
+    	STAT.writelines(statistics)
+    	STAT.close()
 	shutil.rmtree('output')
 	os.system('bin/hadoop dfs -rmr data-output')
 	os.system('bin/hadoop dfs -rmr centroidinput.txt')
 	os.system('bin/hadoop dfs -rmr datapoints.txt')
-
-def makeRandomPoint(num_points, lower, upper):
-    datapoints = ''
-    coordX = ''
-    coordY = ''
-    for i in range(num_points):
-	coordX=random.randint(lower, upper)
- 	coordY=random.randint(lower, upper)
-	datapoints +=`coordX`+','+`coordY`
-	datapoints += ' '
-    FILE = open("datapoints.txt","w")
-    # Write all the lines for datapoints at once:
-    FILE.writelines(datapoints)
-    FILE.close()
-
-    return datapoints
-
 
 if __name__ == "__main__": main(sys.argv)
 
