@@ -4,6 +4,9 @@ import os
 import shutil
 import time
 
+# First step into the algorithm.
+# checks convergence and calls mapReduce
+
 def main(args):
 	# maximum delta is set to 2.
 	maxDelta = 3
@@ -69,7 +72,7 @@ def main(args):
 	  if maxDelta > 2:
 	    os.system('bin/hadoop dfs -put ~/hadoop/centroidinput.txt centroidinput.txt')
 
-  	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper1.py -mapper ~/hadoop/mapper1.py -file ~/hadoop/reducer1.py -reducer ~/hadoop/reducer1.py -input datapoints.txt -file centroidinput.txt -file mapoutput1.txt -file ~/hadoop/defdict.py -output data-output')
+  	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper1.py -mapper ~/hadoop/mapper1.py -file ~/hadoop/reducer1.py -reducer ~/hadoop/reducer1.py -input datapoints.txt -file centroidinput.txt -file ~/hadoop/defdict.py -output data-output')
 
 	    #old_centroid is filled in for future delta calculation
 	    cfile = open("centroidinput.txt", "r")
@@ -88,27 +91,10 @@ def main(args):
 	print "elapsed time ", elapsed, "seconds"
 	statistics += '\n  Time_elapsed: '+ `elapsed`
 	statistics += '\n New Centroids: '+ `currentCentroid`
-
-
-	# final clustering of the datapoints
-	os.system('bin/hadoop dfs -put ~/hadoop/centroidinput.txt centroidinput.txt')
-
-  	os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper1.py -mapper ~/hadoop/mapper1.py -file ~/hadoop/reducerfinal.py -reducer ~/hadoop/reducerfinal.py -input datapoints.txt -file centroidinput.txt -file mapoutput1.txt -file ~/hadoop/defdict.py -output data-output')
-
-	# output is copied to local files for later lookup and the hdfs version is deleted for next iteration.
-	os.system('bin/hadoop dfs -copyToLocal /user/grace/data-output ~/hadoop/output')
-	os.rename("output/part-00000", "finalcluster.txt")
-	cfile = open("finalcluster.txt", "r")
-	currentCluster = cfile.readline()
-	cfile.close()
-	statistics += '\n New Cluster: ' + `currentCluster`
 	STAT = open("statistics.txt","w")
     	# Write all the lines for statistics at once:
     	STAT.writelines(statistics)
     	STAT.close()
-	shutil.rmtree('output')
-	os.system('bin/hadoop dfs -rmr data-output')
-	os.system('bin/hadoop dfs -rmr centroidinput.txt')
 	os.system('bin/hadoop dfs -rmr datapoints.txt')
 
 if __name__ == "__main__": main(sys.argv)
