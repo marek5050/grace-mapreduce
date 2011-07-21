@@ -1,0 +1,156 @@
+Timeline:
+8 June: first attempt at algorithm - just mapper
+13 June : just mapper using algorithms package
+16 June: algorithm complete for mapreduce and kmeans
+22 June: First attempt at mapper python program
+23 June: complete map and reducer python programs and hadoop run with data and centroid points stored as static set
+27 June: autogeneration of datapoints
+29 June:   Mapper and reducer work with input from a file for centroid and datapoints
+30 June: Iterative run based on number of iterations and automatic data point generation
+6 July:  Iterative run based solely on delta convergence and not on num of iteration
+10 July: creating the final cluster
+12 July: kmeans modified to add time taken component and test run
+13 July: kmeans for 3d points - kmeans3d.py, mapper13d.py and reducer13d.py
+
+15 July: created defdict.py for python2.4 in the distributed cluster
+17 July: incorporated finalclustering as mapreduce within kmeans. Addded a new reducer - reducerfinal.py
+19 July: created a separate startup.py to generate an incremental set of datapoints and to standardize the runs;
+         and cleanup.py for cleaning partial runs.
+
+20 July: to plot graph using gnuplot created clustering.py -called by startup.py
+        created mapperfinal.py and discarded reducerfinal.py
+21 July: Created plot.py to plot a cluster and centroids - cent_plot.gp, plotter.gp
+
+        Applied only to 2d so far.
+echo "75,61 70,80 43,99 36,5 81,18 35,67 79,6 55,55 95,87 56,92 11,89 98,59 38,35 50,4 80,69 19,57 77,24 16,43 54,23 66,38 44,39 71,67 7,13 3,18 91,31 73,44 59,27 20,98 25,55 90,73 53,39 67,59 8,98 64,67 33,58 69,99 3,91 58,3 61,64 54,50 94,14 75,26 46,98 4,99 40,7 88,21 14,84 86,42 21,33 12,32 46,39 20,4 17,93 48,30 54,98 79,93 47,45 38,86 69,60 79,22 95,46 48,40 33,85 14,6 1,7 41,82 14,58 84,90 32,86 60,13 57,82 34,99 48,1 64,92 81,34 27,44 60,68 33,97 72,7 7,4 68,8 21,90 21,70 63,34 70,23 9,82 8,26 4,79 2,6 61,52 12,13 19,47 31,48 28,57 94,87 79,86 43,70 48,6 52,4 50,62" | ~/hadoop/finalcluster.py
+
+__________________________________________________________________________________
+
+svn: svn checkout https://grace-mapreduce.googlecode.com/svn/trunk/ ~/hadoop/checkout
+
+checkoutand work from local file and again check in
+
+svn commit -m "delta based iteration" --username deborahchem@gmail.com
+______________________________________________________________________________
+File structure:
+when name node is formatted, usr/tmp/hadoop-grace is created. when bin/start-all is done dfs and mapred folders are created in hadoop-grace.
+to check logs while running - grace/hadoop/logs > userlogs
+ensure startup has centroidinput file - no other files in dfs or local.
+
+_______________________________________________________________________________
+
+To plot
+grace>gnuplot
+gnuplot>set output "hadoop/plotcentroids.ps"
+gnuplot> plot "hadoop/cluster1.txt" u 1:2 w points pointtype 6 lc rgb "red",\
+> "hadoop/cluster2.txt" u 1:2 w points pointtype 4 lc rgb "blue"
+___
+To test mapper:
+
+1 -d:
+echo "1 5 15 25 36 78" | ~/hadoop/mapper1.py
+echo
+echo "564,638 367,206 275,528 526,614 3,62 626,286 715,662 613,585 668,95 324,761 848,95 862,716 869,110 525,389 377,18 612,630 616,779 92,530 180,520 367,743 197,337 556,377 795,96 516,415 318,188" | ~/hadoop/mapper1.py
+
+3d
+echo "564,638,123 367,206,145 275,528,100 526,614,980 3,62,87 626,286,879 715,662,540 613,585,897" | ~/hadoop/mapper13d.py
+
+To test 1-d reducer:
+echo "1 5 15 25 36 78" | ~/hadoop/mapper1.py |sort | ~/hadoop/reducer1.py
+
+To test reducer two dimensional:
+echo "51,4 95,10 15,11 25,16 36,67 78,78 94,44 14,10" | ~/hadoop/mapper1.py |sort | ~/hadoop/reducer1.py
+echo "56,28 35,99 16,79 39,50 29,4 79,4 38,29 22,69 47,55 28,43 72,32 10,24 26,15 97,2 51,82 69,52 44,77 72,33 28,91 67,46 32,58 2,1 27,1 58,25 12,60 63,24 36,67 39,31 14,8 11,22" | ~/hadoop/mapper1.py |sort | ~/hadoop/reducer1.py
+
+echo "564,638,123 367,206,145 275,528,100 526,614,980 3,62,87 626,286,879 715,662,540 613,585,897" | ~/hadoop/mapper13d.py sort | ~/hadoop/reducer13d.py
+
+NOTE: both from mapper and reducer intermediate outputs are written to mapoutput1.txt and centroid2.txt. But that cannot be written in hadoop. only when run from outside. They get created under Grace folder.
+
+bin/hadoop dfs -copyFromLocal ~/hadoop/datainput dinput
+bin/hadoop dfs -ls
+bin/hadoop dfs -rmr data-output
+bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper1a.py -mapper ~/hadoop/mapper1a.py -file ~/hadoop/reducer1a.py -reducer ~/hadoop/reducer1a.py -input dinput/* -output data-output
+to check output: hadoop> bin/hadoop dfs -ls gutenbergnew-output
+hadoop> bin/hadoop dfs -cat data-output/part-00000
+
+
+when datapoints and the centroids are in a file: datainput folder has datafile.txt and centroid folder has centroidinput.txt and datafile.txt and centroidinput.txt are in hadoop home folder for command line
+from commandline: ~/hadoop/mapper1a.py |sort | ~/hadoop/reducer1a.py
+		~/hadoop/mapper1.py |sort | ~/hadoop/reducer1.py
+
+from hdfs
+ssh localhost
+cd hadoop
+bin/hadoop namenode -format
+bin/start-dfs.sh
+bin/start-mapred.sh
+jps
+bin/hadoop dfs -copyFromLocal ~/hadoop/datainput dinput
+bin/hadoop dfs -copyFromLocal ~/hadoop/centroid centroid
+
+bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper1.py -mapper ~/hadoop/mapper1.py -file ~/hadoop/reducer1.py -reducer ~/hadoop/reducer1.py -input datapoints.txt -file centroidinput.txt -output data-output
+
+running using kmeans - when data points are automatically generated.
+
+from cli: ensure datapoints.txt and centroidinput.txt are in home(Grace) folder and run:
+echo "56,28 35,99 16,79 39,50 29,4 79,4 38,29 22,69 47,55 28,43 72,32 10,24 26,15 97,2 51,82 69,52 44,77 72,33 28,91 67,46 32,58 2,1 27,1 58,25 12,60 63,24 36,67 39,31 14,8 11,22" | ~/hadoop/mapper1.py |sort | ~/hadoop/reducer1.py
+
+
+OR RUN KMEANS_CLI.PY
+
+delete exisitng hadoopoutputs/data-output folder/centroidinput1...5.txt
+ssh localhost
+cd hadoop
+bin/hadoop namenode -format
+bin/start-dfs.sh
+bin/start-mapred.sh
+jps
+hadoop> python kmeans.py
+
+to copy output to localdirectory
+hadoop dfs -copyToLocal /user/grace/data-output ~/hadoopoutputs
+
+to check output: hadoop> bin/hadoop dfs -ls data-output
+hadoop> bin/hadoop dfs -cat data-output/part-00000
+
+Steps for the project:
+
+Run a simple word count mapper.
+Run word count mapper and reducer from line mode
+Install hadoop mapreduce.
+Test the mapper reducer word count from pseudo distributed hadoop environment
+Test the mapper reducer word count in real distributed environment
+
+Write a simple mapper for kmeans
+simple reducer for kmeans
+run them with line mode input
+create an input file with datapoints.
+Test kmeans on pseudo-distributed environment
+
+create the startup program to drive the mapreduce
+Test whole unit on pseudo-distributed environment.
+test in distributed environment.
+
+Fine tune program.
+Test run with "n" number of input files.
+
+
+For distributed system:
+Copy the tar.gz folder to the server
+from local comp folder> scp filename grace@pcrg1.ucd.ie:hadoop
+
+untar this folder in the server from the server terminal.
+then sudo vi hadoop-env.sh and uncomment java home folder and change the path to /usr/java/jdk1.6.0_16
+from local comp copy conf-site.xml, hdfs-site.xml, mapred-site.xml to the server
+local comp folder   hadoop > scp conf-site.xml grace@pcrg1.ucd.ie:~hadoop/conf-site.xml
+
+copy input folder tmp in Hadoop folder to server
+hadoop/tmp> scp -r Gutenberg grace@pcrg1.ucd.ie:~hadoop/tmp
+same for other two.
+then format namenode, start-all and run mapreduce programs
+
+to run centroid
+copy centroidinputs and datapoints to server.
+Dont have to format data node everytime
+just stop-all and exit
+
