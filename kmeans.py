@@ -16,11 +16,14 @@ def main(args):
 	# To test intially with 7 iterations
 	num_iter = 1
 	statistics =''
+	statplot =''
 
 	# copies the  generated datapoints file and seed centroid file from local folder to hdfs and starts mapReduce
 	os.system('bin/hadoop dfs -put ~/hadoop/datapoints.txt datapoints.txt')
 	# initialize starttime to calculate the total time taken to converge.
 	start = time.time()
+	statp = open("stat_plot.txt","a")
+	STAT = open("statistics.txt","w")
 
 	while maxDelta >2:
 	  #print num_iter
@@ -91,11 +94,19 @@ def main(args):
 	print "elapsed time ", elapsed, "seconds"
 	statistics += '\n  Time_elapsed: '+ `elapsed`
 	statistics += '\n New Centroids: '+ `currentCentroid`
-	STAT = open("statistics.txt","w")
+
+
+
     	# Write all the lines for statistics at once:
     	STAT.writelines(statistics)
     	STAT.close()
+
+    	# Write all the lines for statplot incrementaly:
+        statplot = `args` + '  '+ `elapsed` + '  '+`num_iter` + '\n'
+
+        statp.writelines(statplot)
+
 	os.system('bin/hadoop dfs -rmr datapoints.txt')
 
-if __name__ == "__main__": main(sys.argv)
+if __name__ == "__main__": main(sys.argv[1])
 

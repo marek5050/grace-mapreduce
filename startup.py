@@ -8,15 +8,27 @@ import time
 #starts with 100 points, 500, 1000, 1500, 2000, 3000, 5000 points
 
 def main(args):
-    #DP = open("datapoints.txt","w").close()
+    DP = open("datapoints.txt","w").close()
     num_points=0
     pointx = ''
     while num_points <3000:
         num_points +=500
-        coords, lower, upper = 2,1, 900
-    	# Create num_points random Points in n-dimensional space
-    	#pointx = makeRandomPoint(num_points, lower, upper)
-    	#shutil.copy("centroid2d.txt","centroidinput.txt")
+
+        # Create num_points random Points in n-dimensional space
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_points*.5), 2,1, 900, 1,900
+        pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_points*.1), 2,50, 350, 50,500
+        pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_points*.1), 2,410, 600,10,550
+        pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
+    	num_gen, coords, lowerx, upperx, lowery, uppery = int(num_points*.1), 2,600, 890, 600,900
+    	pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
+
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_points*.1), 2,100, 500,650,900
+        pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_points*.1), 2,650, 880,50,470
+        pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
+    	shutil.copy("centroid2d.txt","centroidinput.txt")
         os.system("python kmeans.py")
         # final clustering of the datapoints
         os.system("python mapperfinal.py")
@@ -39,26 +51,41 @@ def main(args):
         os.rename("cluster6.txt", newname)
 
 #    DP = open("datapoints.txt","w").close()
-#    num_points=0
-#    pointx = ''
-#    while num_points <2000:
-#        num_points +=500
-#        coords, lower, upper = 3,1, 900
-#    	# Create num_points random Points in n-dimensional space
-#    	pointx = makeRandom3dPoint(num_points, lower, upper)
-#    	shutil.copy("centroid3d.txt","centroidinput.txt")
-#        os.system("python kmeans3d.py")
+    num_points=0
+    pointx = ''
+    while num_points <0:
+        num_points +=500
+#        # Create num_points random Points in n-dimensional space
 
-#        newfilename = "statistics3d_" + `num_points` +".txt"
-#        os.rename("statistics.txt", newfilename)
+        num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_points*.4), 2,1, 900, 1,900,1,900
+        pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
+        num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_points*.1), 2,50, 300, 50,450,50,600
 
-def makeRandomPoint(num_points, lower, upper):
+    	pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
+    	num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_points*.1), 2,410, 600,10,550,100,200
+        pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
+    	num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_points*.1), 2,600, 890, 0,200,10,300
+    	pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
+
+        num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_points*.1), 2,100, 500,650,900,600,700
+        pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
+        num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_points*.1), 2,650, 880,50,470,800,900
+        pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
+        num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_points*.1), 2,800, 900,750,900,800,900
+        pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
+       	shutil.copy("centroid3d.txt","centroidinput.txt")
+        os.system("python kmeans3d.py")
+
+        newfilename = "statistics3d_" + `num_points` +".txt"
+        os.rename("statistics.txt", newfilename)
+
+def makeRandomPoint(num_points, lowerx, upperx, lowery, uppery):
     datapoints = ''
     coordX = ''
     coordY = ''
     for i in range(num_points):
-	coordX=random.randint(lower, upper)
- 	coordY=random.randint(lower, upper)
+	coordX=random.randint(lowerx, upperx)
+ 	coordY=random.randint(lowery, uppery)
 	datapoints +=`coordX`+','+`coordY`
 	datapoints += ' '
     DP = open("datapoints.txt","a")
@@ -68,15 +95,15 @@ def makeRandomPoint(num_points, lower, upper):
 
     return datapoints
 
-def makeRandom3dPoint(num_points, lower, upper):
+def makeRandom3dPoint(num_points, lowerx, upperx, lowery, uppery,lowerz,upperz):
     datapoints = ''
     coordX = ''
     coordY = ''
     coordZ = ''
     for i in range(num_points):
-	coordX=random.randint(lower, upper)
- 	coordY=random.randint(lower, upper)
-	coordZ=random.randint(lower, upper)
+	coordX=random.randint(lowerx, upperx)
+ 	coordY=random.randint(lowery, uppery)
+	coordZ=random.randint(lowerz, upperz)
 	datapoints +=`coordX`+','+`coordY`+','+`coordZ`
 	datapoints += ' '
     DP = open("datapoints.txt","w")
