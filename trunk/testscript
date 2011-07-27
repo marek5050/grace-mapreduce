@@ -22,9 +22,9 @@ Timeline:
 21 July: Created plot.py to plot a cluster and centroids - cent_plot.gp, plotter.gp
         Applied only to 2d so far.
 22 July: Changed the data generation (start.py) program to create clustered data points. for both 2d and 3d
-23 July: Changed start.py and kmeans.py to include time and iteration details in stat_plot.txt filename
-            Now outputs in statistics".txt, final cluster.txt , cluster_1... _6.txtand stat_plot.txt
-            inputs centroid2d_1..._4.txt
+23 July: Changed startup.py to startupb.py and kmeans.py to include time and iteration details in stat_plot.txt filename
+            Now outputs in statistics".txt, final cluster.txt , cluster_1... _6.txt and stat_plot.txt
+            inputs centroid2d_1..._4.txt, statistics.txt
 
 July 22 to run: from dist node cd hadoop
                 bin/start-all.sh
@@ -32,6 +32,11 @@ July 22 to run: from dist node cd hadoop
 
         when done from local terminal /hadoop$ scp grace@pcrg1.ucd.ie:~/hadoop/*.txt ~/hadoop
         then local terminal python plot.py
+
+July 27 to run: python startupb.py
+
+to plot datapoints : copy them to local directory and replace space with \n and , with double space and then
+ in GNUPLOT window plot "datapoints.txt" u 1:2 w points lc rgb "green"
 
 echo "75,61 70,80 43,99 36,5 81,18 35,67 79,6 55,55 95,87 56,92 11,89 98,59 38,35 50,4 80,69 19,57 77,24 16,43 54,23 66,38 44,39 71,67 7,13 3,18 91,31 73,44 59,27 20,98 25,55 90,73 53,39 67,59 8,98 64,67 33,58 69,99 3,91 58,3 61,64 54,50 94,14 75,26 46,98 4,99 40,7 88,21 14,84 86,42 21,33 12,32 46,39 20,4 17,93 48,30 54,98 79,93 47,45 38,86 69,60 79,22 95,46 48,40 33,85 14,6 1,7 41,82 14,58 84,90 32,86 60,13 57,82 34,99 48,1 64,92 81,34 27,44 60,68 33,97 72,7 7,4 68,8 21,90 21,70 63,34 70,23 9,82 8,26 4,79 2,6 61,52 12,13 19,47 31,48 28,57 94,87 79,86 43,70 48,6 52,4 50,62" | ~/hadoop/finalcluster.py
 
