@@ -95,8 +95,6 @@ def main(args):
 	statistics += '\n  Time_elapsed: '+ `elapsed`
 	statistics += '\n New Centroids: '+ `currentCentroid`
 
-
-
     	# Write all the lines for statistics at once:
     	STAT.writelines(statistics)
     	STAT.close()
