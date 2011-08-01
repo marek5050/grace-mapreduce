@@ -22,18 +22,18 @@ def main(args):
         num_points +=500
         num_generated = 500
         # Create num_points random Points in n-dimensional space
-        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.5), 2,1, 900, 1,900
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.1), 2,1, 900, 1,900
         pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
-        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.1), 2,50, 350, 50,500
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.2), 2,50, 350, 50,500
         pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
-        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.1), 2,410, 600,10,550
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.2), 2,410, 600,10,550
         pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
-    	num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.1), 2,600, 890, 600,900
+    	num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.2), 2,600, 890, 600,900
     	pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
 
         num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.1), 2,150, 300,650,900
         pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
-        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.1), 2,650, 880,50,470
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.2), 2,650, 880,50,470
         pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
 
         while num_iter <5:

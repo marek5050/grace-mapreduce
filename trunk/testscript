@@ -23,9 +23,10 @@ Timeline:
         Applied only to 2d so far.
 22 July: Changed the data generation (start.py) program to create clustered data points. for both 2d and 3d
 23 July: Changed startup.py to startupb.py and kmeans.py to include time and iteration details in stat_plot.txt filename
-            Now outputs in statistics".txt, final cluster.txt , cluster_1... _6.txt and stat_plot.txt
+            Now outputs in statistics*.txt, final cluster.txt , cluster_1... _6.txt and stat_plot.txt
             inputs centroid2d_1..._4.txt, statistics.txt
-
+27 July: Changed Startupb.py and run the program iteratively 4 times for each data point set.
+         changed startup1.py for 3d points iterative run.
 July 22 to run: from dist node cd hadoop
                 bin/start-all.sh
                 python startup.py
@@ -34,6 +35,10 @@ July 22 to run: from dist node cd hadoop
         then local terminal python plot.py
 
 July 27 to run: python startupb.py
+July 28 set up fully distributed nodes by making changes to hadoop setup, conf/masters, conf/slaves, core-site.xml, mapred and hdfs-site.
+        had to make changes to /tmp/hadoop-grace/dfs/data/current VERSION as well.
+
+August 1 changed data generation algorithm to create better clusters.
 
 to plot datapoints : copy them to local directory and replace space with \n and , with double space and then
  in GNUPLOT window plot "datapoints.txt" u 1:2 w points lc rgb "green"
