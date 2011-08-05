@@ -15,7 +15,7 @@ def main(args):
   centroidpoint=''
   iter = 0
   for centroid in point2centroid:
-    #print centroid
+    print centroid
 
     iter +=1
     filename = "cluster"+`iter`+'.txt'

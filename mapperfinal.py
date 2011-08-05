@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import sys, math, random
 import clustering
+import removingoutliers
 #from collections import defaultdict
 from defdict import *
 
-# this program performs the final clustering and calls clustering.py  to create separate files
+# this program performs the final clustering and calls remoutliers.py  to remove outliers
 
 def main(args):
 
@@ -17,8 +18,9 @@ def main(args):
   cfile = "centroidinput.txt"
   infilecen = open(cfile,"r")
   centroid = infilecen.readline()
+
   #print centroid
-  #for point in sys.stdin:
+
   for point in dpoints:
   # remove leading and trailing whitespace
 	point = point.strip()
@@ -33,6 +35,7 @@ def main(args):
 	   # increase counters
 	for value in points:
 
+
 		dist = 0
 		minDist = 999999
 		bestCent = 0
@@ -45,7 +48,6 @@ def main(args):
 
 			# To handle non-numeric value in centroid or input points
 			try:
-				#dist = abs(int(cSplit[0]) - int(vSplit[0]))
 				dist = (((int(cSplit[0]) - int(vSplit[0]))**2) + ((int(cSplit[1]) - int(vSplit[1]))**2))**.5
 				#print dist
 				if dist < minDist:
@@ -55,9 +57,14 @@ def main(args):
 				pass
 
        	 	#print '%s\t%s' % (bestCent, value)
+
        	 	point2centroid[bestCent].append(value)
-       	#print point2centroid
-        clustering.main(point2centroid)
+
+
+  #clustering.main(point2centroid)
+  removingoutliers.main(point2centroid)
+  #print point2centroid
+
 
 
 if __name__ == "__main__": main(sys.argv)

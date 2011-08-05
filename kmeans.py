@@ -54,7 +54,7 @@ def main(args):
 
 				# To handle non-numeric value in old or new centroids
 				try:
-					#dist = abs(int(cSplit[0]) - int(vSplit[0]))
+
 					dist = (((int(cSplit[0]) - int(oSplit[0]))**2) + ((int(cSplit[1]) - int(oSplit[1]))**2))**.5
 
 					if dist < minDist:
