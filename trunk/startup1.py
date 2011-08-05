@@ -4,6 +4,7 @@ import os
 import shutil
 import time
 import kmeans
+import plot
 
 # starting point for the system
 #This program runs the test for 2d points in a loop -
@@ -16,24 +17,23 @@ def main(args):
     num_points=0
     pointx = ''
     while num_points <3000:
-        print "num of points"
-        print num_points
+
         num_iter = 0
         num_points +=500
         num_generated = 500
         # Create num_points random Points in n-dimensional space
-        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.5), 2,1, 900, 1,900
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.1), 2,1, 900, 1,900
         pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
-        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.1), 2,50, 350, 50,500
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.2), 2,50, 350, 50,500
         pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
-        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.1), 2,410, 600,10,550
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.2), 2,410, 600,10,550
         pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
-    	num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.1), 2,600, 890, 600,900
+    	num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.2), 2,600, 890, 600,900
     	pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
 
         num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.1), 2,150, 300,650,900
         pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
-        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.1), 2,650, 880,50,470
+        num_gen, coords, lowerx, upperx, lowery, uppery = int(num_generated*.2), 2,650, 880,50,470
         pointx = makeRandomPoint(num_gen, lowerx, upperx, lowery, uppery)
 
         while num_iter <5:
@@ -62,13 +62,13 @@ def main(args):
             os.rename("cluster5.txt", newname)
             newname = "cluster6_" + `num_points` +".txt"
             os.rename("cluster6.txt", newname)
+    plot.main()
 
-    DP = open("datapoints.txt","w").close()
-    SP = open("stat_plot.txt","w").close()
-    ST = open("statistics.txt","w").close()
+#    DP = open("datapoints.txt","w").close()
+
     num_points=0
     pointx = ''
-    while num_points <3000:
+    while num_points <0:
         print "num of points"
         print num_points
         num_iter = 0
@@ -76,17 +76,17 @@ def main(args):
         num_generated = 500
 #        # Create num_points random Points in n-dimensional space
 
-        num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_generated*.4), 2,1, 900, 1,900,1,900
+        num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_generated*.1), 2,1, 900, 1,900,1,900
         pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
-        num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_generated*.1), 2,50, 300, 50,450,50,600
+        num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_generated*.2), 2,50, 300, 50,450,50,600
 
     	pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
-    	num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_generated*.1), 2,410, 600,10,550,100,200
+    	num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_generated*.2), 2,410, 600,10,550,100,200
         pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
     	num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_generated*.1), 2,600, 890, 0,200,10,300
     	pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
 
-        num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_generated*.1), 2,100, 500,650,900,600,700
+        num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_generated*.2), 2,100, 500,650,900,600,700
         pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
         num_gen, coords, lowerx, upperx, lowery, uppery,lower,upper = int(num_generated*.1), 2,650, 880,50,470,800,900
         pointx = makeRandom3dPoint(num_gen, lowerx, upperx, lowery, uppery,lower,upper)
