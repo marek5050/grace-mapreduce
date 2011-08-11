@@ -6,6 +6,7 @@ import os
 # datapoints and centroids (plotter.ps) and statistics (plotter2.ps) plot.
 
 os.system('gnuplot -persist plotter.gp')
+os.system('gnuplot -persist plotter3d.gp')
 #os.system('gnuplot -persist cent_plot.gp')
 #os.system('gnuplot -persist statplotter.gp')
 
