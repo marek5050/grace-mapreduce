@@ -3,6 +3,7 @@ import sys, math, random
 import os
 import shutil
 import time
+
 # First step into the algorithm.
 # checks convergence for 3d points and calls mapReduce
 
@@ -21,7 +22,7 @@ def main(args):
 	os.system('bin/hadoop dfs -put ~/hadoop/datapoints.txt datapoints.txt')
 	# initialize starttime to calculate the total time taken to converge.
 	start = time.time()
-    statp = open("stat_plot3d.txt","a")
+	statp = open("stat_plot3d.txt","a")
 	STAT = open("statistics3d.txt","w")
 
 	while maxDelta >2:
@@ -74,7 +75,7 @@ def main(args):
 	  if maxDelta > 2:
 	    os.system('bin/hadoop dfs -put ~/hadoop/centroidinput.txt centroidinput.txt')
 
-  	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper13d.py -mapper ~/hadoop/mapper13d.py -file ~/hadoop/reducer13d.py -reducer ~/hadoop/reducer13d.py -input datapoints.txt -file centroidinput.txt -file mapoutput1.txt -file ~/hadoop/defdict.py -output data-output')
+  	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper13d.py -mapper ~/hadoop/mapper13d.py -file ~/hadoop/reducer13d.py -reducer ~/hadoop/reducer13d.py -input datapoints.txt -file centroidinput.txt -file ~/hadoop/defdict.py -output data-output')
 
 	    #old_centroid is filled in for future delta calculation
 	    cfile = open("centroidinput.txt", "r")
@@ -105,5 +106,5 @@ def main(args):
 
 	os.system('bin/hadoop dfs -rmr datapoints.txt')
 
-if __name__ == "__main__": main(sys.argv)
+if __name__ == "__main__": main(sys.argv[1])
 

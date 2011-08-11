@@ -39,9 +39,17 @@ July 28 set up fully distributed nodes by making changes to hadoop setup, conf/m
         had to make changes to /tmp/hadoop-grace/dfs/data/current VERSION as well.
 
 August 1 changed data generation algorithm to create better clusters.
+Aug 2   To remove the outliers in the dataset. installed statlib package.
+
+Aug5 only for 2d points Completed outlier detection(removingoutlier.py) and ran in distributed nodes.
+added gnuplot to cent OS and added plotting to startup1.py
+
+Aug11 - completed outlier detection after clustering for 3d points - clsutering3d.py, removingoutliers.py,
+    mapperfinal3d.py, plotter3d.gp and changed startup1.py and plot.py
+
 
 to plot datapoints : copy them to local directory and replace space with \n and , with double space and then
- in GNUPLOT window plot "datapoints.txt" u 1:2 w points lc rgb "green"
+ in GNUPLOT window plot "datapoints.txt" u 1:2 w points lc rgb "green" XXXXXXX changed this and added to startup1.python
 
 echo "75,61 70,80 43,99 36,5 81,18 35,67 79,6 55,55 95,87 56,92 11,89 98,59 38,35 50,4 80,69 19,57 77,24 16,43 54,23 66,38 44,39 71,67 7,13 3,18 91,31 73,44 59,27 20,98 25,55 90,73 53,39 67,59 8,98 64,67 33,58 69,99 3,91 58,3 61,64 54,50 94,14 75,26 46,98 4,99 40,7 88,21 14,84 86,42 21,33 12,32 46,39 20,4 17,93 48,30 54,98 79,93 47,45 38,86 69,60 79,22 95,46 48,40 33,85 14,6 1,7 41,82 14,58 84,90 32,86 60,13 57,82 34,99 48,1 64,92 81,34 27,44 60,68 33,97 72,7 7,4 68,8 21,90 21,70 63,34 70,23 9,82 8,26 4,79 2,6 61,52 12,13 19,47 31,48 28,57 94,87 79,86 43,70 48,6 52,4 50,62" | ~/hadoop/finalcluster.py
 
@@ -58,6 +66,17 @@ when name node is formatted, usr/tmp/hadoop-grace is created. when bin/start-all
 to check logs while running - grace/hadoop/logs > userlogs
 ensure startup has centroidinput file - no other files in dfs or local.
 
+to check the running
+http://pcrg1.ucd.ie:50070/dfshealth.jsp
+http://pcrg1.ucd.ie:50030/jobtracker.jsp
+
+To check dfs health
+bin/hadoop dfsadmin -report
+
+To get off safe mode wait - then
+bin/hadoop dfsadmin -safemode leave
+bin/hadoop dfsadmin -safemode get
+
 _______________________________________________________________________________
 
 To plot
@@ -67,8 +86,13 @@ gnuplot> plot "hadoop/cluster1.txt" u 1:2 w points pointtype 6 lc rgb "red",\
 > "hadoop/cluster2.txt" u 1:2 w points pointtype 4 lc rgb "blue"
 
 for 3d graph
-gnuplot>splot "cluster1.txt" u 1:2:3 w p
+gnuplot>splot "cluster1.txt" u 1:2:3 w p______________________________________________________________________
+
+to convert images to .ps: GIMP
 ___
+
+To copy server files in windows: winscp and to view plots: ghostview
+____________
 To test mapper:
 
 1d:
@@ -164,6 +188,10 @@ Copy the tar.gz folder to the server
 from local comp folder> scp filename grace@pcrg1.ucd.ie:hadoop
 
 untar this folder in the server from the server terminal.
+
+sudo tar xzf hadoop-0.20.2.tar.gz
+
+
 then sudo vi hadoop-env.sh and uncomment java home folder and change the path to /usr/java/jdk1.6.0_16
 from local comp copy conf-site.xml, hdfs-site.xml, mapred-site.xml to the server
 local comp folder   hadoop > scp conf-site.xml grace@pcrg1.ucd.ie:~hadoop/conf-site.xml
