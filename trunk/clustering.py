@@ -15,7 +15,7 @@ def main(args):
   centroidpoint=''
   iter = 0
   for centroid in point2centroid:
-    print centroid
+    #print centroid
 
     iter +=1
     filename = "cluster"+`iter`+'.txt'
@@ -33,8 +33,8 @@ def main(args):
 
     cfile.writelines(datapoint)
     cfile.close()
-  iter+=1
-  filename="cluster"+`iter` + '.txt'
+
+  filename="cluster6.txt"
   #print filename
   cfile= open(filename, 'w')
   cfile.writelines(centroidpoint)

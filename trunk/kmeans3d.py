@@ -12,6 +12,7 @@ def main(args):
 	maxDelta = 3
 	oldCentroid = ''
 	currentCentroid = ''
+	mrtime =0
 
 	# To test intially with 7 iterations
 	num_iter = 1
@@ -20,10 +21,11 @@ def main(args):
 
 	# copies the  generated datapoints file and seed centroid file from local folder to hdfs and starts mapReduce
 	os.system('bin/hadoop dfs -put ~/hadoop/datapoints.txt datapoints.txt')
-	# initialize starttime to calculate the total time taken to converge.
-	start = time.time()
+
+
 	statp = open("stat_plot3d.txt","a")
 	STAT = open("statistics3d.txt","w")
+	start = time.time()
 
 	while maxDelta >2:
 	  #print num_iter
@@ -68,15 +70,16 @@ def main(args):
 	  else:
 		statistics += '\n seed centroid: ' +`currentCentroid`
 	  statistics += '\n num_iteration: ' +`num_iter`+';  Delta: '+`maxDelta`
-	  print maxDelta
-	  print num_iter
-	  print "$$$$$$$$$$$$    next iteration  $$$$$$$$$$$$$$$"
+
 	  #checks the new delta value to avoid additional mapreduce iteration
 	  if maxDelta > 2:
 	    os.system('bin/hadoop dfs -put ~/hadoop/centroidinput.txt centroidinput.txt')
+	    mrstart = time.time()
+
 
   	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper13d.py -mapper ~/hadoop/mapper13d.py -file ~/hadoop/reducer13d.py -reducer ~/hadoop/reducer13d.py -input datapoints.txt -file centroidinput.txt -file ~/hadoop/defdict.py -output data-output')
-
+  	    mrend = time.time()
+  	    mrtime += mrend -mrstart
 	    #old_centroid is filled in for future delta calculation
 	    cfile = open("centroidinput.txt", "r")
 	    oldCentroid = cfile.readline()
@@ -100,7 +103,7 @@ def main(args):
     	STAT.close()
 
     	# Write all the lines for statplot incrementaly:
-        statplot = `args` + '  '+ `elapsed` + '  '+`num_iter` + '\n'
+        statplot = `args` + '  '+ `mrtime` + '  '+`num_iter` + '  '+ `elapsed` + '\n'
 
         statp.writelines(statplot)
 

@@ -32,7 +32,7 @@ set out "plotter2.ps"
 set xlabel "Number of Data points"
 set ylabel "Time to Converge (seconds)"
 set xrange [0:3500]
-set yrange [0:500]
+set yrange [0:300]
 plot "stat_plot.txt" u 1:2 title 'Convergence' w p
 
 set out "datapoints.ps"

@@ -60,13 +60,15 @@ def main(args):
             os.rename("cluster3.txt", newname)
             newname = "cluster4_" + `num_points` +".txt"
             os.rename("cluster4.txt", newname)
-            newname = "cluster5_" + `num_points` +".txt"
-            os.rename("cluster5.txt", newname)
+            if os.path.exists("cluster5.txt"):
+                newname = "cluster5_" + `num_points` +".txt"
+                os.rename("cluster5.txt", newname)
             newname = "cluster6_" + `num_points` +".txt"
             os.rename("cluster6.txt", newname)
     #plot.main()
 
     DP = open("datapoints.txt","w").close()
+    SP = open("stat_plot3d.txt","w").close()
 
     num_points=0
     pointx = ''

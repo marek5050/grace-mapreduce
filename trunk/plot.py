@@ -7,6 +7,7 @@ import os
 
 os.system('gnuplot -persist plotter.gp')
 os.system('gnuplot -persist plotter3d.gp')
+os.system('gnuplot -persist plottersimple.gp')
 #os.system('gnuplot -persist cent_plot.gp')
 #os.system('gnuplot -persist statplotter.gp')
 
