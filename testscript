@@ -49,7 +49,18 @@ Aug11 - completed outlier detection after clustering for 3d points - clustering3
 Aug 12 - created simple mapper and reducer without hadoop for 2d and 3d points and used the same points generated for hadoopoutputs
     separate files for startup1simple, mapper1simple, reducer1simple, kmeanssimple, kmeans3dsimple, reducer13dsimple, mapper13dsimple and plottersimple.gp
 
+Aug16 : tried running all as simple clustering and the final step as mapreduce
     One more run for 2d and 3d and simple ones with new dataset.
+
+Aug17 : ran 1 million points
+
+Aug18: ran 4d points & negative points
+        ran from 50000 to 500000 points 2d and 3d just for time comparison plotconvergence.gp
+Aug 19:changed mapper to create local centroids. created mapper2.py and reducer2.py
+
+Aug 20: changed number of nodes for same dataset by changing replication in hdfs-site and slaves in conf. replication factor set to 1
+
+Aug 23: created splitdb.py to split datapoints for plotting. created plots for thesis.
 ----------------____________________________________________________________________________________
 
 to plot datapoints : copy them to local directory and replace space with \n and , with double space and then

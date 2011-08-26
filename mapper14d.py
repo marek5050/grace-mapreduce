@@ -37,7 +37,7 @@ def main(args):
 	centroid = centroid.strip()
     # split the centroid into centroids
 	centroids = centroid.split()
-	#outfile = open("mapoutput1.txt","w")
+	outfile = open("mapoutput1.txt","w")
 	   # increase counters
 	for value in points:
 		dist = 0
@@ -52,7 +52,7 @@ def main(args):
 			# To handle non-numeric value in centroid or input points
 			try:
 				#dist = abs(int(cSplit[0]) - int(vSplit[0]))
-				dist = (((int(cSplit[0]) - int(vSplit[0]))**2) + ((int(cSplit[1]) - int(vSplit[1]))**2)+ ((int(cSplit[2]) - int(vSplit[2]))**2))**.5
+				dist = (((int(cSplit[0]) - int(vSplit[0]))**2) + ((int(cSplit[1]) - int(vSplit[1]))**2)+ ((int(cSplit[2]) - int(vSplit[2]))**2)+((int(cSplit[3]) - int(vSplit[3]))**2))**.5
 				#print dist
 				if dist < minDist:
 					minDist = dist
@@ -68,9 +68,9 @@ def main(args):
 		#outputmap += `bestCent`+'   '+`value`
 		#outfile.writelines(outputmap)
        	 	print '%s\t%s' % (bestCent, value)
-#	outfile = open("mapoutput1.txt","w")
-#	outfile.writelines(outputmap)
-#	outfile.close()
+	outfile = open("mapoutput1.txt","w")
+	outfile.writelines(outputmap)
+	outfile.close()
 
 def makeCentroids():
 	cfile = open("centroidinput.txt", "r")

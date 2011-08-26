@@ -1,5 +1,10 @@
 #!/usr/bin/env python
+
+from operator import itemgetter
 import sys, math, random
+from defdict import *
+import reducer14dsimple
+# mapper for 4d points without hadoop
 class Point:
     # Instance variables
     # self.coords is a list of coordinates for this Point
@@ -19,15 +24,18 @@ def main(args):
 
 
   # variable to hold map output
-  outputmap = ''
+  point2centroid = defaultdict(list)
   #centroid details are stored in an input file
   #cfile = " ~/hadoop/centroidinput.txt"
+  infiledat = open("datapoints.txt", "r")
+  datap = infiledat.readline()
+  points = datap.split()
+
   cfile = "centroidinput.txt"
   infilecen = open(cfile,"r")
   centroid = infilecen.readline()
-  #print centroid
-  for point in sys.stdin:
-  #for point in points:
+  #for point in sys.stdin:
+  for point in points:
   # remove leading and trailing whitespace
 	point = point.strip()
     # split the line into words
@@ -37,8 +45,7 @@ def main(args):
 	centroid = centroid.strip()
     # split the centroid into centroids
 	centroids = centroid.split()
-	#outfile = open("mapoutput1.txt","w")
-	   # increase counters
+		   # increase counters
 	for value in points:
 		dist = 0
 		minDist = 999999
@@ -52,7 +59,7 @@ def main(args):
 			# To handle non-numeric value in centroid or input points
 			try:
 				#dist = abs(int(cSplit[0]) - int(vSplit[0]))
-				dist = (((int(cSplit[0]) - int(vSplit[0]))**2) + ((int(cSplit[1]) - int(vSplit[1]))**2)+ ((int(cSplit[2]) - int(vSplit[2]))**2))**.5
+				dist = (((int(cSplit[0]) - int(vSplit[0]))**2) + ((int(cSplit[1]) - int(vSplit[1]))**2)+ ((int(cSplit[2]) - int(vSplit[2]))**2)+((int(cSplit[3]) - int(vSplit[3]))**2))**.5
 				#print dist
 				if dist < minDist:
 					minDist = dist
@@ -65,13 +72,11 @@ def main(args):
     # Reduce step, i.e. the input for reducer.py
     #
     # tab-delimited
-		#outputmap += `bestCent`+'   '+`value`
-		#outfile.writelines(outputmap)
-       	 	print '%s\t%s' % (bestCent, value)
-#	outfile = open("mapoutput1.txt","w")
-#	outfile.writelines(outputmap)
-#	outfile.close()
 
+       	 	#print '%s\t%s' % (bestCent, value)
+       	 	point2centroid[bestCent].append(point)
+
+  reducer14dsimple.main(point2centroid)
 def makeCentroids():
 	cfile = open("centroidinput.txt", "r")
 	seed = cfile.readline()

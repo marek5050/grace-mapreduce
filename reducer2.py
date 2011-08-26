@@ -5,26 +5,31 @@ from operator import itemgetter
 from defdict import *
 import sys
 
-# reducer for 2d points without hadoop
+# reducer for 2d points
 def main(args):
 
   point2centroid = defaultdict(list)
-  point2centroid = args
 
-  pointX =0
-  pointY =0
 
-  newCentroid=''
-  oldCentroid=''
+  # input comes from STDIN
+  for line in sys.stdin:
+    	# remove leading and trailing whitespace
+	line = line.strip()
+	# parse the input we got from mapper.py into a dictionary
+
+	oldCentroid, tempCentroid = line.split('\t')
+	point2centroid[oldCentroid].append(tempCentroid)
+
+  #print point2centroid.items()
+  pointX= pointY =0
+
+
+  newCentroid= ''
+
 
   for centroid in point2centroid:
-	sumX =0
-	sumY=0
-	count=0
-	newX =0
-	newY=0
-	oldCentroid  += centroid
-	oldCentroid += ' '
+	sumX= sumY= count= newX=newY =0
+
 	for point in point2centroid[centroid]:
 		pointX, pointY = point.split(',')
 		sumX += int(pointX)
@@ -37,10 +42,7 @@ def main(args):
 	newCentroid +=`newX`+','+`newY`
 	newCentroid+= ' '
 
-
-  cfile= open("centroidinput.txt", 'w')
-  cfile.writelines(newCentroid)
-  cfile.close()
+  print newCentroid
 
 if __name__ == "__main__": main(sys.argv)
 

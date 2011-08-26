@@ -14,7 +14,7 @@ def main(args):
 	oldCentroid = ''
 	currentCentroid = ''
 
-	# To test intially with 7 iterations
+
 	num_iter = 1
 	statistics =''
 	statplot =''

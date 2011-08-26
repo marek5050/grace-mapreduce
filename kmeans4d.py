@@ -5,7 +5,7 @@ import shutil
 import time
 
 # First step into the algorithm.
-# checks convergence for 3d points and calls mapReduce
+# checks convergence for 4d points and calls mapReduce
 
 def main(args):
 	# maximum delta is set to 2.
@@ -22,8 +22,8 @@ def main(args):
 	os.system('bin/hadoop dfs -put ~/hadoop/datapoints.txt datapoints.txt')
 
 
-	statp = open("stat_plot3d.txt","a")
-	STAT = open("statistics3d.txt","w")
+	statp = open("stat_plot4d.txt","a")
+	STAT = open("statistics4d.txt","w")
 	start = time.time()
 
 	while maxDelta >2:
@@ -56,7 +56,7 @@ def main(args):
 				# To handle non-numeric value in old or new centroids
 				try:
 
-					dist = (((int(cSplit[0]) - int(oSplit[0]))**2) + ((int(cSplit[1]) - int(oSplit[1]))**2) + ((int(cSplit[2]) - int(oSplit[2]))**2))**.5
+					dist = (((int(cSplit[0]) - int(oSplit[0]))**2) + ((int(cSplit[1]) - int(oSplit[1]))**2) + ((int(cSplit[2]) - int(oSplit[2]))**2)+ ((int(cSplit[3]) - int(oSplit[3]))**2))**.5
 
 					if dist < minDist:
 						minDist = dist
@@ -76,7 +76,7 @@ def main(args):
 	    mrstart = time.time()
 
 
-  	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper13d.py -mapper ~/hadoop/mapper13d.py -file ~/hadoop/reducer13d.py -reducer ~/hadoop/reducer13d.py -input datapoints.txt -file centroidinput.txt -file ~/hadoop/defdict.py -output data-output')
+  	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper14d.py -mapper ~/hadoop/mapper14d.py -file ~/hadoop/reducer14d.py -reducer ~/hadoop/reducer14d.py -input datapoints.txt -file centroidinput.txt -file ~/hadoop/defdict.py -output data-output')
   	    mrend = time.time()
   	    mrtime += mrend -mrstart
 	    #old_centroid is filled in for future delta calculation

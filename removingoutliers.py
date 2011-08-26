@@ -24,16 +24,10 @@ def main(args):
 
     centroidX, centroidY = centroid.split(',')
 
-    distlist=[]
-    finallist=[]
-    pdevlist =[]
-    rejectlist=[]
-    newX =0
-    newY =0
-    sumX=0
-    sumY=0
-    count=0
-    ctrrej=0
+    distlist=finallist=pdevlist=rejectlist=[]
+
+    newX =newY=sumX=sumY=count=ctrrej=0
+
 
     for point in point2centroid[centroid]:
         #print point

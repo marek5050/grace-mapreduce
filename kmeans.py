@@ -13,7 +13,7 @@ def main(args):
 	oldCentroid = ''
 	currentCentroid = ''
 	mrtime = 0
-	# To test intially with 7 iterations
+
 	num_iter = 1
 	statistics =''
 	statplot =''
@@ -71,23 +71,28 @@ def main(args):
 	  statistics += '\n num_iteration: ' +`num_iter`+';  Delta: '+`maxDelta`
 
 	  #checks the new delta value to avoid additional mapreduce iteration
+
 	  if maxDelta > 2:
 	    os.system('bin/hadoop dfs -put ~/hadoop/centroidinput.txt centroidinput.txt')
 	    mrstart = time.time()
-
-  	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -file ~/hadoop/mapper1.py -mapper ~/hadoop/mapper1.py -file ~/hadoop/reducer1.py -reducer ~/hadoop/reducer1.py -input datapoints.txt -file centroidinput.txt -file ~/hadoop/defdict.py -output data-output')
+	    #print "%%%%%%%%%%%%mrstart:", mrstart
+  	    os.system('bin/hadoop jar ~/hadoop/mapred/contrib/streaming/hadoop-0.21.0-streaming.jar -D mapred.map.tasks=4 -file ~/hadoop/mapper2.py -mapper ~/hadoop/mapper2.py -file ~/hadoop/reducer2.py -reducer ~/hadoop/reducer2.py -input datapoints.txt -file centroidinput.txt -file ~/hadoop/defdict.py -output data-output')
   	    mrend = time.time()
+  	   # print "%%%%%%%%%%%%mrend:", mrend
   	    mrtime += mrend -mrstart
+  	   # print "%%%%%%%%%%%%mrtime:", mrtime
 	    #old_centroid is filled in for future delta calculation
 	    cfile = open("centroidinput.txt", "r")
 	    oldCentroid = cfile.readline()
 	    cfile.close()
+
 	    # output is copied to local files for later lookup and the hdfs version is deleted for next iteration.
 	    os.system('bin/hadoop dfs -copyToLocal /user/grace/data-output ~/hadoop/output')
 	    os.rename("output/part-00000", "centroidinput.txt")
 	    shutil.rmtree('output')
 
   	    num_iter += 1
+
 	    os.system('bin/hadoop dfs -rmr data-output')
 	    os.system('bin/hadoop dfs -rmr centroidinput.txt')
 	end = time.time()
