@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 import sys, math, random
+from defdict import *
+
+# mapper for 2d points
 class Point:
     # Instance variables
     # self.coords is a list of coordinates for this Point
@@ -20,29 +23,27 @@ def main(args):
 
   # variable to hold map output
   outputmap = ''
-  #centroid details are stored in an input file
-  #cfile = " ~/hadoop/centroidinput.txt"
+  point2centroid = defaultdict(list)
+
   cfile = "centroidinput.txt"
   infilecen = open(cfile,"r")
   centroid = infilecen.readline()
   #print centroid
   for point in sys.stdin:
-  #for point in points:
-  # remove leading and trailing whitespace
+
 	point = point.strip()
     # split the line into words
 	points = point.split()
 
-#   remove leading and trailing whitespace
 	centroid = centroid.strip()
     # split the centroid into centroids
 	centroids = centroid.split()
-	#outfile = open("mapoutput1.txt","w")
-	   # increase counters
+
 	for value in points:
 		dist = 0
 		minDist = 999999
 		bestCent = 0
+
 
 		for c in centroids:
 			# split each co-ordinate of the centroid and the point
@@ -52,25 +53,42 @@ def main(args):
 			# To handle non-numeric value in centroid or input points
 			try:
 				#dist = abs(int(cSplit[0]) - int(vSplit[0]))
-				dist = (((int(cSplit[0]) - int(vSplit[0]))**2) + ((int(cSplit[1]) - int(vSplit[1]))**2)+ ((int(cSplit[2]) - int(vSplit[2]))**2))**.5
+				dist = (((int(cSplit[0]) - int(vSplit[0]))**2) + ((int(cSplit[1]) - int(vSplit[1]))**2))**.5
 				#print dist
 				if dist < minDist:
 					minDist = dist
 					bestCent = c
+
 			except ValueError:
 				pass
 
-    # write the results to STDOUT (standard output) and store in a variable to write to an output file;
-    # what we output here will be the input for the
-    # Reduce step, i.e. the input for reducer.py
-    #
-    # tab-delimited
-		#outputmap += `bestCent`+'   '+`value`
-		#outfile.writelines(outputmap)
-       	 	print '%s\t%s' % (bestCent, value)
-#	outfile = open("mapoutput1.txt","w")
-#	outfile.writelines(outputmap)
-#	outfile.close()
+       	 	#print '%s\t%s' % (bestCent, value)
+       	 	point2centroid[bestCent].append(value)
+
+
+        pointX= pointY =0
+       # print point2centroid
+
+        newCentroid= oldCentroid=''
+
+
+        for centroid in point2centroid:
+	        sumX= sumY= count= newX=newY =0
+
+	        for point in point2centroid[centroid]:
+
+		        pointX, pointY = point.split(',')
+
+
+		        sumX += int(pointX)
+		        sumY +=int(pointY)
+		        count +=1
+
+	        newX=sumX/count
+	        newY=sumY/count
+	        newCentroid =`newX`+','+`newY`
+
+	        print '%s\t%s' % (centroid, newCentroid)
 
 def makeCentroids():
 	cfile = open("centroidinput.txt", "r")
